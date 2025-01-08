@@ -51,10 +51,10 @@ jobs:
           KEY_PASSWORD=${{ secrets.KEY_PASSWORD }}
 
           # Use jarsigner to sign the APK
-          jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA-256 -keystore $KEYSTORE_PATH app/build/outputs/apk/release/app-release-unsigned.apk $KEY_ALIAS -storepass $KEYSTORE_PASSWORD -keypass $KEY_PASSWORD
+          jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA-256 -keystore $KEYSTORE_PATH app/build/outputs/apk/full/release/app-full-release-unsigned.apk $KEY_ALIAS -storepass $KEYSTORE_PASSWORD -keypass $KEY_PASSWORD
 
           # Align and optimize the APK using zipalign
-          $ANDROID_HOME/build-tools/30.0.3/zipalign -v 4 app/build/outputs/apk/release/app-release-unsigned.apk app/build/outputs/apk/release/app-release.apk
+          $ANDROID_HOME/build-tools/30.0.3/zipalign -v 4 app/build/outputs/apk/full/release/app-full-release-unsigned.apk app/build/outputs/apk/full/release/app-full-release.apk
           
           echo "APK built and signed successfully!"
       
@@ -62,5 +62,5 @@ jobs:
       - name: Upload APK as artifact
         uses: actions/upload-artifact@v3
         with:
-          name: app-release-apk
+          name: app-full-release-apk
           path: app/build/outputs/apk/full/release/app-full-release.apk
