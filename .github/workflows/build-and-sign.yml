@@ -1,4 +1,4 @@
-name: Build and Sign APK
+name: Build AAPS
 
 on:
   workflow_dispatch: # This allows you to trigger the action manually from the GitHub UI
@@ -30,11 +30,9 @@ jobs:
             
       # Step 4: Set up Android SDK
       - name: Set up Android SDK
-        uses: android-actions/setup-android@v2
+        uses: android-actions/setup-android@v3.2.1
         with:
-          api-level: 30 # You can choose the appropriate API level for your project
-          build-tools: 30.0.3 # Set this to match your build-tools version
-          target: android-30 # Set to the correct target API version
+          cmdline-tools-version: 11076708
 
       # Step 5: Install specific build tools version (30.0.3)
       - name: Install Build Tools 30.0.3
@@ -44,12 +42,7 @@ jobs:
       # Step 6: Generate a signed APK
       - name: Build and Sign APK
         run: |
-          ls $ANDROID_HOME/build-tools/30.0.3
-          
           ./gradlew clean assembleFullRelease
-
-          # Sign APK with the keystore file found in the repository
-          # Ensure the keystore file is already in the repository, for example, in a folder like "keys/"
 
           # Path to the keystore file in the repository
           KEYSTORE_PATH=keys/androidstudioKeystore.jks
@@ -65,9 +58,9 @@ jobs:
           
           echo "APK built and signed successfully!"
       
-      # Step 7: Upload the APK as an artifact (optional)
+      # Step 7: Upload the APK as an artifact
       - name: Upload APK as artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: app-full-release-apk
           path: app/build/outputs/apk/full/release/app-full-release.apk
