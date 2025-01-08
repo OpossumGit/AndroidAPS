@@ -39,7 +39,7 @@ jobs:
       # Step 5: Install specific build tools version (30.0.3)
       - name: Install Build Tools 30.0.3
         run: |
-          yes | $ANDROID_HOME/tools/bin/sdkmanager "build-tools;30.0.3"
+          yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager "build-tools;30.0.3"
       
       # Step 6: Generate a signed APK
       - name: Build and Sign APK
