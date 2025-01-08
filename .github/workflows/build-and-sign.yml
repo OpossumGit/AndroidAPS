@@ -27,7 +27,11 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
           restore-keys: |
             ${{ runner.os }}-gradle-
-      
+
+      # Step 5: Install specific build tools version (30.0.3)
+      - name: Install Build Tools 30.0.3
+        run: |
+          yes | $ANDROID_HOME/tools/bin/sdkmanager "build-tools;30.0.3"
       # Step 4: Set up Android SDK
       - name: Set up Android SDK
         uses: android-actions/setup-android@v2
@@ -36,9 +40,11 @@ jobs:
           build-tools: 30.0.3 # Set this to match your build-tools version
           target: android-30 # Set to the correct target API version
       
-      # Step 5: Generate a signed APK
+      # Step 6: Generate a signed APK
       - name: Build and Sign APK
         run: |
+          ls $ANDROID_HOME/build-tools/30.0.3
+          
           ./gradlew clean assembleFullRelease
 
           # Sign APK with the keystore file found in the repository
@@ -58,7 +64,7 @@ jobs:
           
           echo "APK built and signed successfully!"
       
-      # Step 6: Upload the APK as an artifact (optional)
+      # Step 7: Upload the APK as an artifact (optional)
       - name: Upload APK as artifact
         uses: actions/upload-artifact@v3
         with:
