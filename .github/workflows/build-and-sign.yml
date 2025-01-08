@@ -44,10 +44,10 @@ jobs:
           # Ensure the keystore file is already in the repository, for example, in a folder like "keys/"
 
           # Path to the keystore file in the repository
-          KEYSTORE_PATH=keys/your-keystore.jks
-          KEYSTORE_PASSWORD=your_keystore_password
-          KEY_ALIAS=your_key_alias
-          KEY_PASSWORD=your_key_password
+          KEYSTORE_PATH=keys/androidstudioKeystore.jks
+          KEYSTORE_PASSWORD=${{ secrets.KEYSTORE_PASSWORD }}
+          KEY_ALIAS=${{ secrets.KEY_ALIAS }}
+          KEY_PASSWORD=${{ secrets.KEY_PASSWORD }}
 
           # Use jarsigner to sign the APK
           jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA-256 -keystore $KEYSTORE_PATH app/build/outputs/apk/release/app-release-unsigned.apk $KEY_ALIAS -storepass $KEYSTORE_PASSWORD -keypass $KEY_PASSWORD
