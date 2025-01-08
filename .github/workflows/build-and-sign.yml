@@ -44,23 +44,15 @@ jobs:
         run: |
           ./gradlew clean assembleFullRelease
 
-          ls app/build/outputs/apk/full/release/
-
-          # Path to the keystore file in the repository
+          # Align and optimize the APK using zipalign
+          $ANDROID_HOME/build-tools/30.0.3/zipalign -v -p 4 app/build/outputs/apk/full/release/app-full-release-unsigned.apk app/build/outputs/apk/full/release/app-full-release-unsigned-aligned.apk
+          
+          # Use apksigner to sign the APK
           KEYSTORE_PATH=keys/androidstudioKeystore.jks
           KEYSTORE_PASSWORD=${{ secrets.KEYSTORE_PASSWORD }}
           KEY_ALIAS=${{ secrets.KEY_ALIAS }}
           KEY_PASSWORD=${{ secrets.KEY_PASSWORD }}
-
-          # Align and optimize the APK using zipalign
-          $ANDROID_HOME/build-tools/30.0.3/zipalign -v -p 4 app/build/outputs/apk/full/release/app-full-release-unsigned.apk app/build/outputs/apk/full/release/app-full-release-unsigned-aligned.apk
-          
-          ls app/build/outputs/apk/full/release/
-
-          # Use apksigner to sign the APK
           $ANDROID_HOME/build-tools/30.0.3/apksigner sign --ks $KEYSTORE_PATH --ks-key-alias $KEY_ALIAS --ks-pass pass:$KEYSTORE_PASSWORD --key-pass pass:$KEY_PASSWORD --out app/build/outputs/apk/full/release/app-full-release.apk app/build/outputs/apk/full/release/app-full-release-unsigned-aligned.apk
-
-          ls app/build/outputs/apk/full/release/
 
           echo "APK built and signed successfully!"
       
