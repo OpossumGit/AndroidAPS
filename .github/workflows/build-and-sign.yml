@@ -2,12 +2,24 @@ name: Build AAPS
 
 on:
   workflow_dispatch: # This allows you to trigger the action manually from the GitHub UI
-
+    inputs:
+      password:
+        description: "What is the password to build?"
+        required: true
+        
 jobs:
   build:
     runs-on: ubuntu-latest
     
     steps:
+      # Step 0: do nothing if user does not know the password
+      - name: Check condition
+        run: |
+          if [ ! ${{ secrets.KEY_PASSWORD }} == ${{ github.event.inputs.password }}]; then
+            echo "Wrong password!"
+            exit 1
+          fi
+        continue-on-error: false 
       # Step 1: Checkout the repository to the GitHub runner
       - name: Checkout repository
         uses: actions/checkout@v3
